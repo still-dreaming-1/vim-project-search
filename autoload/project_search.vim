@@ -4,7 +4,7 @@ function! project_search#find_word_under_cursor_in_current_file_types()
 endfunction
 
 function! project_search#find_in_current_file_types(search)
-	let current_file_extension= Current_buffer().file().extension
+	let current_file_extension= L_current_buffer().file().extension
 	" create a scratch buffer below the current window
 	below new
 	setlocal buftype=nofile
