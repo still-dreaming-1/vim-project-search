@@ -21,6 +21,8 @@ If you did that, `*` would activate that feature instead of `<leader>*`. Of cour
 
 `let mapleader=" "`
 
+If you set your leader that way, and keep the default mapping, you would activate that feature with space *.
+
 **Bugs**
 
 Highlighting inside the search results only works if you have previously searched for something with the forward slash.
