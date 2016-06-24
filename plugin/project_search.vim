@@ -7,5 +7,5 @@ nnoremap <Plug>(project_search-find_word_undor_cursor) :call project_search#find
 command! -nargs=1 Fc set hlsearch | call project_search#find_in_current_file_types(<f-args>)
 
 let s:current_script_path= expand('<sfile>')
-let g:project_search_dir_path= Dir(s:current_script_path).parent().parent().path
+let g:project_search_dir_path= L_dir(s:current_script_path).parent().parent().path
 call Log('project-search plugin end')

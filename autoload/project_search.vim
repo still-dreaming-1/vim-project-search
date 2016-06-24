@@ -1,6 +1,6 @@
 function! project_search#find_word_under_cursor_in_current_file_types()
-	" execute 'Fc '.Current_cursor().word()
-	call project_search#find_in_current_file_types(Current_cursor().word())
+	" execute 'Fc '.L_current_cursor().word()
+	call project_search#find_in_current_file_types(L_current_cursor().word())
 endfunction
 
 function! project_search#find_in_current_file_types(search)
