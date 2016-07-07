@@ -1,6 +1,9 @@
 call l#log('project-search plugin start')
-if !hasmapto('<Plug>(project_search-find_word_undor_cursor)') 
-	nmap <leader>* <Plug>(project_search-find_word_undor_cursor)
+let maps= L_maps()
+if !maps.normal_mode_map_exists_to('<Plug>(project_search-find_word_undor_cursor)') 
+	if !maps.normal_mode_map_exists_from('<leader>*')
+		nmap <leader>* <Plug>(project_search-find_word_undor_cursor)
+	endif
 endif 
 nnoremap <Plug>(project_search-find_word_undor_cursor) :call project_search#find_word_under_cursor_in_current_file_types()<CR>
 "Default mapping to use for this. Since this is using <Plug> it can easilly be changed by the user
