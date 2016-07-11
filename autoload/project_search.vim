@@ -19,6 +19,7 @@ function! project_search#find_in_current_file_types(search)
 	" had already searched on something
 	let @/ = a:search
 	normal! n
+	call matchadd("Search", a:search)
 	nnoremap <buffer> q :bdelete<CR>
 	nnoremap <CR> :Top<CR>:q<CR>^<C-W>Fn
 	call l#log('project_search#find_in_current_file_types end')
