@@ -12,12 +12,15 @@ function! project_search#find_in_current_file_types(search)
 	setlocal buftype=nofile
 	setlocal bufhidden=hide
 	setlocal noswapfile
-	let out= L_shell().run('grep -Frin --include="*.'.current_file_extension.'" "'.a:search.'" .')
+	let escaped_search= escape(a:search, '\')
+	let out= L_shell().run('grep -Frin --include="*.'.current_file_extension.'" "'.escaped_search.'" .')
 	call L_current_buffer().append_line(split(out, '\n'))
 	normal! ggdd
 	" Vim is designed so that searching in Vimscript does not replace the last search. This is a workaround for that. It still does not highlight the last search term unless the user
 	" had already searched on something
+	" try to find this backslash \
 	let @/ = a:search
+	" let @/ = L_s(a:search).get_no_magic().str
 	normal! n
 	call matchadd("Search", a:search)
 	nnoremap <buffer> q :bdelete<CR>
