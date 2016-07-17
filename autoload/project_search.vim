@@ -18,11 +18,13 @@ function! project_search#find_in_current_file_types(search)
 	normal! ggdd
 	" Vim is designed so that searching in Vimscript does not replace the last search. This is a workaround for that. It still does not highlight the last search term unless the user
 	" had already searched on something
-	let @/ = L_s(a:search).get_no_magic().str
+	let no_magic_string= L_s(a:search).get_no_magic().str
+	let @/ = no_magic_string
 	normal! n
 	call matchadd("Search", a:search)
 	nnoremap <buffer> q :bdelete<CR>
-	nnoremap <CR> :Top<CR>:q<CR>^<C-W>Fn
+	nnoremap <CR> :Top<CR>:q<CR>^<C-W>F
+	call search(no_magic_string, 'c')
 	call l#log('project_search#find_in_current_file_types end')
 endfunction
 
