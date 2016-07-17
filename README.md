@@ -22,11 +22,3 @@ If you did that, `*` would activate that feature instead of `<leader>*`. Of cour
 `let mapleader=" "`
 
 If you set your leader that way, and keep the default mapping, you would activate that feature with space *.
-
-**Known Bugs**
-
-Highlighting inside the search results relies on the Vim search feature, so it is a form of regular expression. This is a bug because the search string is not supposed to be treated as a regular expression, and it is not as far as what shows up inside the search results.
-
-Once you press enter to navigate to the found result, you will be taken to the wrong line if what you are searching for is at the beginning of the line and it appears more than once in the file. If you suspect this has happened, press N to go back to the correct result inside that file.
-
-Once you press enter to navitate to the found result, the plugin once again relies on Vim's search feature to find the search term in that file. So it will treat the search text as a form of regular expression even though it should not. This could cause your term not to be fully navigated to, or the wrong thing to be navigated to inside that file; But it you should at least be looking at the correct file.
