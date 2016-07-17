@@ -18,9 +18,7 @@ function! project_search#find_in_current_file_types(search)
 	normal! ggdd
 	" Vim is designed so that searching in Vimscript does not replace the last search. This is a workaround for that. It still does not highlight the last search term unless the user
 	" had already searched on something
-	" try to find this backslash \
-	let @/ = a:search
-	" let @/ = L_s(a:search).get_no_magic().str
+	let @/ = L_s(a:search).get_no_magic().str
 	normal! n
 	call matchadd("Search", a:search)
 	nnoremap <buffer> q :bdelete<CR>
