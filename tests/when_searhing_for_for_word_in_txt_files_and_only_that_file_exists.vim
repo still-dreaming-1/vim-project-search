@@ -1,6 +1,5 @@
 UTSuite when searching for a word in all txt files and only that file exists
 
-
 function! s:setup_script_vars()
 	let s:static_data_dir= L_dir(g:project_search_dir_path.'/static test data')
 		let s:static_text_file= s:static_data_dir.get_contained_file('file with one word.txt')
