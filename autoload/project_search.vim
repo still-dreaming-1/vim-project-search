@@ -6,6 +6,18 @@ endfunction
 
 function! project_search#find_in_current_file_types(search)
 	call l#log('project_search#find_in_current_file_types start')
+	call project_search#find(a:search, 1)
+	call l#log('project_search#find_in_current_file_types end')
+endfunction
+
+function! project_search#find_in_all_file_types(search)
+	call l#log('project_search#find_in_all_file_types start')
+	call project_search#find(a:search, 0)
+	call l#log('project_search#find_in_all_file_types end')
+endfunction
+
+function! project_search#find(search, only_current_file_types)
+	call l#log('project_search#find_in_all_file_types start')
 	let current_file_extension= L_current_buffer().file().extension
 	" create a scratch buffer below the current window
 	below new
@@ -13,7 +25,12 @@ function! project_search#find_in_current_file_types(search)
 	setlocal bufhidden=hide
 	setlocal noswapfile
 	let escaped_search= escape(a:search, '\')
-	let out= L_shell().run('grep -Frin --include="*.'.current_file_extension.'" "'.escaped_search.'" .')
+	let command= 'grep -Frin'
+	if a:only_current_file_types
+		let command= command.' --include="*.'.current_file_extension.'"'
+	endif
+	let command= command.' "'.escaped_search.'" .'
+	let out= L_shell().run(command)
 	call L_current_buffer().append_line(split(out, '\n'))
 	normal! ggdd
 	" Vim is designed so that searching in Vimscript does not replace the last search. This is a workaround for that. It still does not highlight the last search term unless the user
@@ -25,7 +42,7 @@ function! project_search#find_in_current_file_types(search)
 	nnoremap <buffer> q :bdelete<CR>
 	nnoremap <CR> :Top<CR>:q<CR>^<C-W>F
 	call search(no_magic_string, 'c')
-	call l#log('project_search#find_in_current_file_types end')
+	call l#log('project_search#find_in_all_file_types end')
 endfunction
 
 call l#log('project-search autoload end')
