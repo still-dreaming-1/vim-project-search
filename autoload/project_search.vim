@@ -29,7 +29,10 @@ function! project_search#find(search, only_current_file_types)
 	if a:only_current_file_types
 		let command= command.' --include="*.'.current_file_extension.'"'
 	endif
-	let command= command.' "'.escaped_search.'" .'
+    " the -- in the following shell code signifies to grep that the options
+    " have now ended and only positional parameters follow. This allows the
+    " character "-" to be searched on.
+	let command= command.' -- "'.escaped_search.'" .'
 	let out= L_shell().run(command)
 	call L_current_buffer().append_line(split(out, '\n'))
 	normal! ggdd
