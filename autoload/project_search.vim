@@ -18,27 +18,27 @@ endfunction
 
 function! project_search#find(search, only_current_file_types)
 	call l#log('project_search#find_in_all_file_types start')
-	let current_file_extension= L_current_buffer().file().extension
+	let current_file_extension = L_current_buffer().file().extension
 	" create a scratch buffer below the current window
 	below new
 	setlocal buftype=nofile
 	setlocal bufhidden=hide
 	setlocal noswapfile
-	let escaped_search= escape(a:search, '\')
-	let command= 'grep -Frin'
+	let escaped_search = escape(a:search, '\')
+	let command = 'grep -Frin'
 	if a:only_current_file_types
-		let command= command.' --include="*.'.current_file_extension.'"'
+		let command = command.' --include="*.'.current_file_extension.'"'
 	endif
     " the -- in the following shell code signifies to grep that the options
     " have now ended and only positional parameters follow. This allows the
     " character "-" to be searched on.
-	let command= command.' -- "'.escaped_search.'" .'
-	let out= L_shell().run(command)
+	let command = command.' -- "'.escaped_search.'" .'
+	let out = L_shell().run(command)
 	call L_current_buffer().append_line(split(out, '\n'))
 	normal! ggdd
 	" Vim is designed so that searching in Vimscript does not replace the last search. This is a workaround for that. It still does not highlight the last search term unless the user
 	" had already searched on something
-	let no_magic_string= L_s(a:search).get_no_magic().str
+	let no_magic_string = L_s(a:search).get_no_magic().str
 	let @/ = no_magic_string
 	normal! n
 	call matchadd("Search", a:search)
