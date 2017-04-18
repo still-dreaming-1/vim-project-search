@@ -24,7 +24,7 @@ function! project_search#find(search, only_current_file_types)
 	setlocal buftype=nofile
 	setlocal bufhidden=hide
 	setlocal noswapfile
-	let escaped_search = escape(a:search, '\')
+	let escaped_search = shellescape(a:search)
 	let command = 'grep -Frin'
 	if a:only_current_file_types
 		let command = command.' --include="*.'.current_file_extension.'"'
@@ -32,7 +32,7 @@ function! project_search#find(search, only_current_file_types)
     " the -- in the following shell code signifies to grep that the options
     " have now ended and only positional parameters follow. This allows the
     " character "-" to be searched on.
-	let command = command.' -- "'.escaped_search.'" .'
+	let command = command.' -- '.escaped_search.' .'
 	let out = L_shell().run(command)
 	call L_current_buffer().append_line(split(out, '\n'))
 	normal! ggdd

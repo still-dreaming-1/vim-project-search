@@ -39,4 +39,10 @@ function! s:safe_teardown()
 endfunction
 
 function! s:Test_something()
+    " searching for one double quote
+    " searching for one single quote
+    " searching for a "\"
+    " searching for a "/"
+    " searching for a "\n"
+    " searching for a "\r"
 endfunction
