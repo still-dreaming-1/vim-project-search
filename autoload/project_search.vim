@@ -27,7 +27,10 @@ function! project_search#find(search, only_current_file_types)
 	let escaped_search = shellescape(a:search)
 	let command = 'grep -Frin'
 	if a:only_current_file_types
-		let command = command.' --include="*.'.current_file_extension.'"'
+		" let command = command.' --include="*.'.current_file_extension.'"'
+        let include_param = shellescape('*.'.current_file_extension)
+		" let command = command.' --include="*.'.current_file_extension.'"'
+		let command = command.' --include='.include_param
 	endif
     " the -- in the following shell code signifies to grep that the options
     " have now ended and only positional parameters follow. This allows the
