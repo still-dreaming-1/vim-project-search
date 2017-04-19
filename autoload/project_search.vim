@@ -51,7 +51,14 @@ function! project_search#find(search, only_current_file_types)
     nnoremap <buffer><CR> :Top<CR>:q<CR>^<C-W>F
     " Bring the cursor to the matching search term in the file. The 'c' makes
     " it accept a match at the cursor position which allows this to work
-    " correctly when the match is at the beginning of the line.
+    " correctly when the match is at the beginning of the line:
+    " Actually for some reason the following line is no longer working. This
+    " doesn't make sense to me because I can the previous code works
+    " correctly. The correct file is opened and the correct line is jumped to.
+    " I am further confused by the fact that manually entering this line as a
+    " command after all that worked does make the cursor move to that term. So
+    " it seems to only not work in this exact context. I'm not sure when this
+    " stopped working, it used to work...
     call search(no_magic_string, 'c')
     call l#log('project_search#find end')
 endfunction
