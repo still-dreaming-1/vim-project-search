@@ -58,7 +58,10 @@ function! project_search#find(search, only_current_file_types)
     " I am further confused by the fact that manually entering this line as a
     " command after all that worked does make the cursor move to that term. So
     " it seems to only not work in this exact context. I'm not sure when this
-    " stopped working, it used to work...
+    " stopped working, it used to work. I think I have narrowed this down
+    " some. When VimL code runs that splits the current buffer and then moves
+    " to the top one (via :Top) and then that code calls search('whatever'),
+    " the search does not work.
     call search(no_magic_string, 'c')
     call l#log('project_search#find end')
 endfunction
