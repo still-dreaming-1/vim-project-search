@@ -43,10 +43,11 @@ function! project_search#find(search, only_current_file_types)
     " had already searched on something
     let no_magic_string = L_s(a:search).get_no_magic().str
     let @/ = no_magic_string
+    " call l#log('project_search#find search result buffer no magic search string: '.no_magic_string)
     normal! n
     call matchadd("Search", a:search)
     nnoremap <buffer> q :bdelete<CR>
-    nnoremap <CR> :Top<CR>:q<CR>^<C-W>F
+    nnoremap <buffer><CR> :Top<CR>:q<CR>^<C-W>F
     call search(no_magic_string, 'c')
     call l#log('project_search#find end')
 endfunction
