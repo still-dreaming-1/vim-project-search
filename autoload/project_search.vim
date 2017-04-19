@@ -17,7 +17,7 @@ function! project_search#find_in_all_file_types(search)
 endfunction
 
 function! project_search#find(search, only_current_file_types)
-    call l#log('project_search#find_in_all_file_types start')
+    call l#log('project_search#find start')
     let current_file_extension = L_current_buffer().file().extension
     " create a scratch buffer below the current window
     below new
@@ -48,7 +48,7 @@ function! project_search#find(search, only_current_file_types)
     nnoremap <buffer> q :bdelete<CR>
     nnoremap <CR> :Top<CR>:q<CR>^<C-W>F
     call search(no_magic_string, 'c')
-    call l#log('project_search#find_in_all_file_types end')
+    call l#log('project_search#find end')
 endfunction
 
 call l#log('project-search autoload end')
