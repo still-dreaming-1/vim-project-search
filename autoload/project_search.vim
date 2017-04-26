@@ -45,9 +45,11 @@ function! project_search#find(search, only_current_file_types)
     normal! n
     call matchadd("Search", a:search)
     nnoremap <buffer> q :bdelete<CR>
-    " Move the cursor to the top window, close that window bringing the cursor back to
-    " the search results window, go to the beginning of the line, split the
-    " window and go to the file and line number under the cursor:
+    " This mapping changes the meaning of the enter key in normal mode to do
+    " the following while you are in a search result buffer. Move the cursor
+    " to the top window, close that window bringing the cursor back to the
+    " search results window, go to the beginning of the line, split the window
+    " and go to the file and line number under the cursor:
     nnoremap <buffer><CR> :Top<CR>:q<CR>^<C-W>F
     " Bring the cursor to the matching search in the results buffer. The 'c' makes
     " it accept a match at the cursor position which allows this to work
