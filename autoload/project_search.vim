@@ -51,7 +51,8 @@ function! project_search#find(search, only_current_file_types)
     " to the top window, close that window bringing the cursor back to the
     " search results window, go to the beginning of the line, split the window
     " and go to the file and line number under the cursor:
-    nnoremap <buffer><CR> :Top<CR>:q<CR>^<C-W>F
+    let b:project_search_current_search = a:search
+    nnoremap <buffer><CR> :let g:project_search_go_to_on_line = b:project_search_current_search<CR>:Top<CR>:q<CR>^<C-W>F:call project_search#go_to_first_match_on_current_line()<CR>
 
     " Bring the cursor to the matching search in the results buffer. The 'c' makes
     " it accept a match at the cursor position which allows this to work
@@ -59,6 +60,17 @@ function! project_search#find(search, only_current_file_types)
     call search(no_magic_string, 'c')
 
     call l#log('project_search#find end')
+endfunction
+
+function! project_search#go_to_first_match_on_current_line()
+    let search_string = g:project_search_go_to_on_line
+    normal! 0
+    let current_line_s = L_s(getline('.'))
+    let number_characters_to_the_right = current_line_s.index_of(search_string)
+    while number_characters_to_the_right != 0
+        normal! l
+        let number_characters_to_the_right -= 1
+    endwhile
 endfunction
 
 call l#log('project-search autoload end')
