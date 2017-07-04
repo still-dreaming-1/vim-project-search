@@ -67,7 +67,7 @@ function! project_search#go_to_first_match_on_current_line()
     normal! 0
     let current_line_s = L_s(getline('.'))
     let number_characters_to_the_right = current_line_s.index_of(search_string)
-    while number_characters_to_the_right != 0
+    while number_characters_to_the_right > 0
         normal! l
         let number_characters_to_the_right -= 1
     endwhile
