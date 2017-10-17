@@ -1,22 +1,22 @@
 call l#log('project-search autoload start')
 
-function! project_search#find_word_under_cursor_in_current_file_types()
+function! project_search#find_word_under_cursor_in_current_file_types() abort
     call project_search#find_in_current_file_types(L_current_cursor().word())
 endfunction
 
-function! project_search#find_in_current_file_types(search)
+function! project_search#find_in_current_file_types(search) abort
     call l#log('project_search#find_in_current_file_types start')
     call project_search#find(a:search, 1)
     call l#log('project_search#find_in_current_file_types end')
 endfunction
 
-function! project_search#find_in_all_file_types(search)
+function! project_search#find_in_all_file_types(search) abort
     call l#log('project_search#find_in_all_file_types start')
     call project_search#find(a:search, 0)
     call l#log('project_search#find_in_all_file_types end')
 endfunction
 
-function! project_search#find(search, only_current_file_types)
+function! project_search#find(search, only_current_file_types) abort
     call l#log('project_search#find start')
     let current_file_extension = L_current_buffer().file().extension
     " create a scratch buffer below the current window
@@ -43,7 +43,7 @@ function! project_search#find(search, only_current_file_types)
     let @/ = no_magic_string
     call l#log('project_search#find in search result buffer no magic search string: '.no_magic_string)
     normal! n
-    call matchadd("Search", a:search)
+    call matchadd('Search', a:search)
     nnoremap <buffer> q :bdelete<CR>
 
     " This mapping changes the meaning of the enter key in normal mode to do
@@ -62,7 +62,7 @@ function! project_search#find(search, only_current_file_types)
     call l#log('project_search#find end')
 endfunction
 
-function! project_search#go_to_first_match_on_current_line()
+function! project_search#go_to_first_match_on_current_line() abort
     let search_string = g:project_search_go_to_on_line
     normal! 0
     let current_line_s = L_s(getline('.'))
