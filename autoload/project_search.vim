@@ -30,6 +30,12 @@ function! project_search#find(search, only_current_file_types) abort
         let include_param = shellescape('*.'.current_file_extension)
         let command = command.' --include='.include_param
     endif
+    if len(g:project_search_exclude_dir_paths) > 0
+        for path in g:project_search_exclude_dir_paths
+            let exclude_param = shellescape(path)
+            let command = command.' --exclude-dir='.exclude_param
+        endfor
+    endif
     " the -- in the following shell code signifies to grep that the options
     " have now ended and only positional parameters follow. This allows the
     " character "-" to be searched on.
@@ -37,8 +43,8 @@ function! project_search#find(search, only_current_file_types) abort
     let out = L_shell().run(command)
     call L_current_buffer().append_line(split(out, '\n'))
     normal! ggdd
-    " Vim is designed so that searching in Vimscript does not replace the last search. This is a workaround for that. It still does not highlight the last search term unless the user
-    " had already searched on something
+    " Vim is designed so that searching in Vimscript does not replace the last search. This is a workaround for that.
+    " It still does not highlight the last search term unless the user had already searched on something
     let no_magic_string = L_s(a:search).get_no_magic().str
     let @/ = no_magic_string
     call l#log('project_search#find in search result buffer no magic search string: '.no_magic_string)

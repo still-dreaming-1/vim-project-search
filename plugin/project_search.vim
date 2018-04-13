@@ -15,4 +15,7 @@ command! -nargs=1 Fa set hlsearch | call project_search#find_in_all_file_types(<
 
 let s:current_script_path = expand('<sfile>')
 let g:project_search_dir_path = L_dir(s:current_script_path).parent().parent().path
+if exists('g:project_search_exclude_dir_paths') == 0
+    let g:project_search_exclude_dir_paths = []
+endif
 call l#log('project-search plugin end')
