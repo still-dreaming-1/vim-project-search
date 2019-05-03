@@ -15,7 +15,7 @@ All the features have the following things in common. Searches are for file cont
 
 **Installation**
 
-You will have to install my [vim-elhiv](https://github.com/still-dreaming-1/vim-elhiv) plugin library first before this will work. Then just install this plugin the normal way you install Vim plugins. I recommend using a plugin manager.
+You will have to install my [vim-elhiv](https://github.com/still-dreaming-1/vim-elhiv) plugin library first before this will work. The instructions to install that have an extra atypical step, so please read the install instructions for that plugin library. Then just install this plugin the normal way you install Vim plugins. I recommend using a plugin manager such as [vim-plug](https://github.com/junegunn/vim-plug).
 
 **Options**
 
