@@ -50,7 +50,6 @@ function! project_search#find(search, only_current_file_types) abort
     call l#log('project_search#find in search result buffer no magic search string: '.no_magic_string)
     normal! n
     call matchadd('Search', a:search)
-    nnoremap <buffer> q :bdelete<CR>
 
     " This mapping changes the meaning of the enter key in normal mode to do
     " the following while you are in a search result buffer. Move the cursor
