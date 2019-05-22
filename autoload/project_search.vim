@@ -23,6 +23,7 @@ function! project_search#find(search, only_current_file_types) abort
     below new
     setlocal buftype=acwrite
     setlocal noswapfile
+    setlocal bufhidden=wipe
     let buffer_name = localtime() . ' - project_search_results: ' . a:search
     execute 'file ' . buffer_name
     augroup VimProjectSearchResults
@@ -100,6 +101,7 @@ function! project_search#save_result_edits_to_files() abort
     call sort(buffer_numbers_to_reload, 'n')
     call uniq(buffer_numbers_to_reload)
     let current_buffer_number = bufnr('%')
+    setlocal bufhidden=
     for buffer_number in buffer_numbers_to_reload
         try
             execute buffer_number . 'bufdo e'
@@ -107,6 +109,7 @@ function! project_search#save_result_edits_to_files() abort
         endtry
     endfor
     execute 'buffer ' . current_buffer_number
+    setlocal bufhidden=wipe
 endfunction
 
 function! project_search#try_save_result_line(line_number) abort
