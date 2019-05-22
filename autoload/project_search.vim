@@ -18,7 +18,7 @@ endfunction
 
 function! project_search#find(search, only_current_file_types) abort
     call l#log('project_search#find start')
-    let current_file_extension = '' . L_current_buffer().file().extension . ''
+    let current_file_extension = '' . L_current_buffer().file().extension
     " create a scratch buffer below the current window
     below new
     setlocal buftype=acwrite
