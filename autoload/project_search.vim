@@ -18,59 +18,68 @@ endfunction
 
 function! project_search#find(search, only_current_file_types) abort
     call l#log('project_search#find start')
-    let current_file_extension = '' . L_current_buffer().file().extension
-    " create a scratch buffer below the current window
-    below new
-    setlocal buftype=acwrite
-    setlocal noswapfile
-    setlocal bufhidden=wipe
-    let buffer_name = localtime() . ' - project_search_results: ' . a:search
-    execute 'file ' . buffer_name
-    augroup VimProjectSearchResults
-        autocmd! * <buffer>
-        autocmd BufWriteCmd <buffer> call project_search#save_result_edits_to_files()
-    augroup END
-    let escaped_search = shellescape(a:search)
-    let command = 'grep -Frin'
-    if a:only_current_file_types
-        let include_param = shellescape('*.'.current_file_extension)
-        let command = command . ' --include='.include_param
-    endif
-    if len(g:project_search_exclude_dir_paths) > 0
-        for path in g:project_search_exclude_dir_paths
-            let exclude_param = shellescape(path)
-            let command = command . ' --exclude-dir=' . exclude_param
-        endfor
-    endif
-    " the -- in the following shell code signifies to grep that the options
-    " have now ended and only positional parameters follow. This allows the
-    " character "-" to be searched on.
-    let command = command . ' -- ' . escaped_search . ' .'
-    let out = L_shell().run(command)
-    call L_current_buffer().append_line(split(out, '\n'))
-    normal! ggdd
-    set nomodified
-    " Vim is designed so that searching in Vimscript does not replace the last search. This is a workaround for that.
-    " It still does not highlight the last search term unless the user had already searched on something
-    let no_magic_string = L_s(a:search).get_no_magic().str
-    let @/ = no_magic_string
-    call l#log('project_search#find in search result buffer no magic search string: '.no_magic_string)
-    normal! n
-    call matchadd('Search', a:search)
+    try
+        let current_file_extension = '' . L_current_buffer().file().extension
+        " create a scratch buffer below the current window
+        below new
+        setlocal buftype=acwrite
+        setlocal noswapfile
+        setlocal bufhidden=wipe
+        let buffer_name = localtime() . ' - project_search_results: ' . a:search
+        execute 'file ' . buffer_name
+        augroup VimProjectSearchResults
+            autocmd! * <buffer>
+            autocmd BufWriteCmd <buffer> call project_search#save_result_edits_to_files()
+        augroup END
+        let escaped_search = shellescape(a:search)
+        let command = 'grep -Frin'
+        if a:only_current_file_types
+            let include_param = shellescape('*.' . current_file_extension)
+            let command = command . ' --include=' . include_param
+        endif
+        if len(g:project_search_exclude_dir_paths) > 0
+            for path in g:project_search_exclude_dir_paths
+                let exclude_param = shellescape(path)
+                let command = command . ' --exclude-dir=' . exclude_param
+            endfor
+        endif
+        " the -- in the following shell code signifies to grep that the options
+        " have now ended and only positional parameters follow. This allows the
+        " character "-" to be searched on.
+        let command = command . ' -- ' . escaped_search . ' .'
+        let out = L_shell().run(command)
+        call L_current_buffer().append_line(split(out, '\n'))
+        normal! ggdd
+        set nomodified
+        " Vim is designed so that searching in Vimscript does not replace the last search. This is a workaround for that.
+        " It still does not highlight the last search term unless the user had already searched on something
+        let no_magic_string = L_s(a:search).get_no_magic().str
+        let @/ = no_magic_string
+        call l#log('project_search#find in search result buffer no magic search string: '.no_magic_string)
+        try
+            normal! n
+            call matchadd('Search', a:search)
+        catch \^Vim(normal):E486:.*\
+        endtry
 
-    " This mapping changes the meaning of the enter key in normal mode to do
-    " the following while you are in a search result buffer. Move the cursor
-    " to the top window, close that window bringing the cursor back to the
-    " search results window, go to the beginning of the line, split the window
-    " and go to the file and line number under the cursor:
-    let b:project_search_current_search = a:search
-    nnoremap <buffer><CR> :call project_search#try_go_to_result_under_cursor()<CR>
+        " This mapping changes the meaning of the enter key in normal mode to do
+        " the following while you are in a search result buffer. Move the cursor
+        " to the top window, close that window bringing the cursor back to the
+        " search results window, go to the beginning of the line, split the window
+        " and go to the file and line number under the cursor:
+        let b:project_search_current_search = a:search
+        nnoremap <buffer><CR> :call project_search#try_go_to_result_under_cursor()<CR>
 
-    " Bring the cursor to the matching search in the results buffer. The 'c' makes
-    " it accept a match at the cursor position which allows this to work
-    " correctly when the match is at the beginning of the line:
-    call search(no_magic_string, 'c')
-
+        " Bring the cursor to the matching search in the results buffer. The 'c' makes
+        " it accept a match at the cursor position which allows this to work
+        " correctly when the match is at the beginning of the line:
+        call search(no_magic_string, 'c')
+    catch
+        " wrap the exception because Vim does not allow throwing exception prepended with Vim
+        let wrapped_exception = 'project_search#find() unhandled exception: ' . v:exception
+        call l#log(wrapped_exception)
+        throw wrapped_exception
+    endtry
     call l#log('project_search#find end')
 endfunction
 
@@ -81,7 +90,7 @@ function! project_search#try_go_to_result_under_cursor() abort
         try
             let search_result = project_search_result#new(current_line_s)
         catch /project_search_result#new#precondition_failed:.*/
-            call l#log('not a valid search result to go to. Exception message: ' . v:exception)
+            call l#log('not a valid search result to go to. Handled exception message: ' . v:exception)
             return
         endtry
 
@@ -115,8 +124,10 @@ function! project_search#try_go_to_result_under_cursor() abort
         execute '' . search_result.line_number
         call project_search#go_to_first_match_on_current_line(current_search)
     catch
-        call l#log('unhandled exception: ' . v:exception)
-        throw v:exception
+        " wrap the exception because Vim does not allow throwing exception prepended with Vim
+        let wrapped_exception = 'project_search#try_go_to_result_under_cursor() unhandled exception: ' . v:exception
+        call l#log(wrapped_exception)
+        throw wrapped_exception
     endtry
 endfunction
 
