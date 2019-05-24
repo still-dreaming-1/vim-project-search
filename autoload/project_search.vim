@@ -64,7 +64,7 @@ function! project_search#find(search, only_current_file_types) abort
     " search results window, go to the beginning of the line, split the window
     " and go to the file and line number under the cursor:
     let b:project_search_current_search = a:search
-    nnoremap <buffer><CR> :let g:project_search_go_to_on_line = b:project_search_current_search<CR>:Top<CR>:q<CR>^<C-W>F:call project_search#go_to_first_match_on_current_line()<CR>
+    nnoremap <buffer><CR> :call project_search#try_go_to_result_under_cursor()<CR>
 
     " Bring the cursor to the matching search in the results buffer. The 'c' makes
     " it accept a match at the cursor position which allows this to work
@@ -74,11 +74,56 @@ function! project_search#find(search, only_current_file_types) abort
     call l#log('project_search#find end')
 endfunction
 
-function! project_search#go_to_first_match_on_current_line() abort
-    let search_string = g:project_search_go_to_on_line
+function! project_search#try_go_to_result_under_cursor() abort
+    try
+        let current_search = b:project_search_current_search
+        let current_line_s = L_s(getline('.'))
+        try
+            let search_result = project_search_result#new(current_line_s)
+        catch /project_search_result#new#precondition_failed:.*/
+            call l#log('not a valid search result to go to. Exception message: ' . v:exception)
+            return
+        endtry
+
+        let result_window_id = win_getid()
+        " go up one window (if one exists above):
+        execute "normal! \<C-w>k"
+        let possibly_above_window_id = win_getid()
+        let possibly_above_buffer_number = bufnr('%')
+        let possibly_above_buffer_info = L_null()
+        for buffer in getbufinfo()
+            if buffer.bufnr == possibly_above_buffer_number
+                let possibly_above_buffer_info = buffer
+            endif
+        endfor
+        if possibly_above_buffer_info == L_null()
+            throw 'project_search#logic_exception: expected to set possibly_above_buffer_info to buffer info dictionary'
+        endif
+        let open_result_in_above_window = 0
+        if possibly_above_window_id != result_window_id
+            let above_buffer_name_s = L_s(possibly_above_buffer_info.name)
+            if !above_buffer_name_s.contains(' - project_search_results: ')
+                let open_result_in_above_window = 1
+            endif
+        endif
+        if open_result_in_above_window
+            execute 'e ' . fnameescape(search_result.file.path)
+        else
+            call win_gotoid(result_window_id)
+            execute 'aboveleft split ' . fnameescape(search_result.file.path)
+        endif
+        execute '' . search_result.line_number
+        call project_search#go_to_first_match_on_current_line(current_search)
+    catch
+        call l#log('unhandled exception: ' . v:exception)
+        throw v:exception
+    endtry
+endfunction
+
+function! project_search#go_to_first_match_on_current_line(search_string) abort
     normal! 0
     let current_line_s = L_s(getline('.'))
-    let number_characters_to_the_right = current_line_s.index_of(search_string)
+    let number_characters_to_the_right = current_line_s.index_of(a:search_string)
     while number_characters_to_the_right > 0
         normal! l
         let number_characters_to_the_right -= 1
