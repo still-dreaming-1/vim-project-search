@@ -25,7 +25,7 @@ function! project_search#find(search, only_current_file_types) abort
         setlocal buftype=acwrite
         setlocal noswapfile
         setlocal bufhidden=wipe
-        let buffer_name = localtime() . ' - project_search_results: ' . a:search
+        let buffer_name = fnameescape(localtime() . ' - project_search_results: ' . a:search)
         execute 'file ' . buffer_name
         augroup VimProjectSearchResults
             autocmd! * <buffer>
