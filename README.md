@@ -10,9 +10,11 @@ All the features have the following things in common. Searches are for file cont
 Result buffers get completely wiped after they are no longer visible. So this means, among other things, that if you use `:q` to close the results window, you won't be able to bring it up again. The purpose behind this is to prevent more and more result buffers from staying around as you keep performing additional searches, which is both annoying and dangerous, as they quickly become out of date as you continue to make code changes. As it is now, you are still warned if you try to close the results while there are unsaved changes. Why are these buffers not simply deleted instead of wiped? I tried that, but I could not find any use for it that did not just make things more annoying. For example, if you create a mark in a result buffer, and then delete it without wiping it, you can go back to that mark, but the buffer is just empty. If you wipe it and then try to go to that mark, you get an error message that the buffer does not exist. I am open to deleting instead of wiping if someone presents a case for it.
 
 `:Fc` command (find current) followed by what you want to search for. Searches for stuff in all files in the current working directory matching the current file types.
+
 `:Fsc` command (find case-sensitive current) followed by what you want to search for. Case sensitive version of the Fc command (described on line above).
 
 `:Fa` command (find all) followed by what you want to search for. Searches for stuff in the all files in the current working directory regardless of file type.
+
 `:Fsa` command (find case-sensitive all) followed by what you want to search for. Case sensitive version of the Fa command (described on line above)
 
 `<leader>*` in normal mode. This is similar to the Vim feature where you press `*` in normal mode to search for the word under the cursor except this also searches other files in your current working directory that match the current file type.
