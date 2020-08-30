@@ -11,11 +11,11 @@ Result buffers get completely wiped after they are no longer visible. So this me
 
 `:Fc` command (find current) followed by what you want to search for. Searches for stuff in all files in the current working directory matching the current file types.
 
-`:Fsc` command (find case-sensitive current) followed by what you want to search for. Case sensitive version of the Fc command (described on line above).
+`:Fsc` command (find case-sensitive current) followed by what you want to search for. Case sensitive version of the Fc command (described just above).
 
 `:Fa` command (find all) followed by what you want to search for. Searches for stuff in the all files in the current working directory regardless of file type.
 
-`:Fsa` command (find case-sensitive all) followed by what you want to search for. Case sensitive version of the Fa command (described on line above)
+`:Fsa` command (find case-sensitive all) followed by what you want to search for. Case sensitive version of the Fa command (described just above)
 
 `<leader>*` in normal mode. This is similar to the Vim feature where you press `*` in normal mode to search for the word under the cursor except this also searches other files in your current working directory that match the current file type.
 
