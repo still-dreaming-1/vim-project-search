@@ -1,22 +1,22 @@
 call l#log('project-search autoload start')
 
 function! project_search#find_word_under_cursor_in_current_file_types() abort
-    call project_search#find_in_current_file_types(L_current_cursor().word())
+    call project_search#find_in_current_file_types(L_current_cursor().word(), 0)
 endfunction
 
-function! project_search#find_in_current_file_types(search) abort
+function! project_search#find_in_current_file_types(search, case_sensitive) abort
     call l#log('project_search#find_in_current_file_types start')
-    call project_search#find(a:search, 1)
+    call project_search#find(a:search, a:case_sensitive, 1)
     call l#log('project_search#find_in_current_file_types end')
 endfunction
 
-function! project_search#find_in_all_file_types(search) abort
+function! project_search#find_in_all_file_types(search, case_sensitive) abort
     call l#log('project_search#find_in_all_file_types start')
-    call project_search#find(a:search, 0)
+    call project_search#find(a:search, a:case_sensitive, 0)
     call l#log('project_search#find_in_all_file_types end')
 endfunction
 
-function! project_search#find(search, only_current_file_types) abort
+function! project_search#find(search, case_sensitive, only_current_file_types) abort
     call l#log('project_search#find start')
     try
         let current_file_extension = '' . L_current_buffer().file().extension
@@ -32,7 +32,10 @@ function! project_search#find(search, only_current_file_types) abort
             autocmd BufWriteCmd <buffer> call project_search#save_result_edits_to_files()
         augroup END
         let escaped_search = shellescape(a:search)
-        let command = 'grep -Frin'
+        let command = 'grep -Frn'
+        if !a:case_sensitive
+            let command .= 'i'
+        endif
         if a:only_current_file_types
             let include_param = shellescape('*.' . current_file_extension)
             let command = command . ' --include=' . include_param
