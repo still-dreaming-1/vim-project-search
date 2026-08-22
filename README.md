@@ -1,4 +1,7 @@
 # vim-project-search
+
+I no longer intend to use or maintain this. Let me know if you would like me to continue maintaining or supporting it. I currently use stock or mostly stock nvim as needed, but I do most of my development in VSCode. I do use vscode-neovim with a custom config, but I don't use this plugin from there.
+
 Optimized search and edit workflow
 
 An extremely optimized search and edit workflow that allows you to do things the Vim way. Search results appear in a new buffer in a new window that you can navigate around in the Vim way. If you edit the results buffer and save, corresponding changes are saved to the files. There are little workflow tweaks that make working with the search results very efficient, such as pressing enter to go to that line in that file.
