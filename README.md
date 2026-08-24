@@ -1,7 +1,5 @@
 # vim-project-search
 
-I no longer intend to use or maintain this. Let me know if you would like me to continue maintaining or supporting it. I currently use stock or mostly stock nvim as needed, but I do most of my development in VSCode. I do use vscode-neovim with a custom config, but I don't use this plugin from there.
-
 Optimized search and edit workflow
 
 An extremely optimized search and edit workflow that allows you to do things the Vim way. Search results appear in a new buffer in a new window that you can navigate around in the Vim way. If you edit the results buffer and save, corresponding changes are saved to the files. There are little workflow tweaks that make working with the search results very efficient, such as pressing enter to go to that line in that file.
@@ -24,7 +22,7 @@ Result buffers get completely wiped after they are no longer visible. So this me
 
 **Installation**
 
-You will have to install my [vim-elhiv](https://github.com/still-dreaming-1/vim-elhiv) plugin library first before this will work. The instructions to install that have an extra atypical step, so please read the install instructions for that plugin library. Then just install this plugin the normal way you install Vim plugins. I recommend using a plugin manager such as [vim-plug](https://github.com/junegunn/vim-plug).
+You will have to install my [vim-elhiv](https://github.com/still-dreaming-1/vim-elhiv) plugin library first before this will work. The instructions to install that have an extra atypical step, so please read the install instructions for that plugin library. Then just install this plugin the normal way you install Vim plugins. I recommend using a plugin manager such as Neovim's built in vim.pack.
 
 **Options**
 
